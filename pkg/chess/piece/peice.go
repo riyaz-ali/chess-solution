@@ -8,6 +8,33 @@ import (
 	"sync"
 )
 
+// Kind is an enum of valid chess.Piece types supported
+type Kind string
+
+const (
+	KindPawn  = "pawn"
+	KindKing  = "king"
+	KindQueen = "queen"
+)
+
+// New returns a new chess.Piece identified by the given type
+func New(kind Kind, pos chess.Position) (chess.Piece, error) {
+	if !pos.Valid() {
+		return nil, fmt.Errorf("invalid position: %s", pos)
+	}
+
+	switch kind {
+	case KindPawn:
+		return &Pawn{pos: pos}, nil
+	case KindKing:
+		return &King{pos: pos}, nil
+	case KindQueen:
+		return &Queen{pos: pos}, nil
+	default:
+		return nil, fmt.Errorf("unknown piece of type: %s", kind)
+	}
+}
+
 // Pawn represents a pawn chess.Piece. A pawn can move one step in vertical forward direction only.
 type Pawn struct{ pos chess.Position }
 
