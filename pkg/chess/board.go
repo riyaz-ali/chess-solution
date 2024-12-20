@@ -6,8 +6,8 @@ import "fmt"
 // Board represent a MxN size chess board.
 type Board struct{ Col, Row int }
 
-// New returns a new Board of size n*n
-func New(n int) *Board { return &Board{Col: n, Row: n} }
+// NewBoard returns a new Board of size n*n
+func NewBoard(n int) *Board { return &Board{Col: n, Row: n} }
 
 // WithinBound returns true if the given position is within this board's bounding grid.
 func (board *Board) WithinBound(pos Position) bool {
@@ -16,11 +16,6 @@ func (board *Board) WithinBound(pos Position) bool {
 	}
 
 	col, row := pos.Split()
-
-	// we convert col from rune to an integer in the range 1-26 before comparing
-	//
-	// NOTE: because Position only supports a single character for column, the
-	// effective size limit for a board is 26xN grid.
 	if (col < 1 || col > board.Col) || (row < 1 || row > board.Row) {
 		return false
 	}
@@ -62,3 +57,6 @@ func (pos Position) Valid() bool {
 	col, row := pos.Split()
 	return col >= 1 && col <= 26 && row > 0
 }
+
+// Add adds the given delta for col and row and returns a new position
+func (pos Position) Add(dc, dr int) Position { col, row := pos.Split(); return Pos(col+dc, row+dr) }

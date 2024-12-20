@@ -16,7 +16,7 @@ func TestBoard_WithinBound(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		if got := New(c.N).WithinBound(c.Pos); got != c.Expected {
+		if got := NewBoard(c.N).WithinBound(c.Pos); got != c.Expected {
 			t.Errorf("Board(n=%d), %s: got %v; want %v", c.N, c.Pos.String(), got, c.Expected)
 		}
 	}
