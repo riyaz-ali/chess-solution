@@ -4,6 +4,7 @@ package piece
 import (
 	"fmt"
 	"github.com/riyaz-ali/chess/pkg/chess"
+	"sort"
 	"sync"
 )
 
@@ -87,6 +88,7 @@ func (q *Queen) ListAll(board *chess.Board) []chess.Position {
 		result = append(result, pos)
 	}
 
+	sort.Sort(chess.ByPosition(result)) // sort the result to ensure consistency in output
 	return result
 }
 

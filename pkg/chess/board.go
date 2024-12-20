@@ -4,10 +4,10 @@ package chess
 import "fmt"
 
 // Board represent a MxN size chess board.
-type Board struct{ Col, Row int }
+type Board struct{ col, row int }
 
 // NewBoard returns a new Board of size n*n
-func NewBoard(n int) *Board { return &Board{Col: n, Row: n} }
+func NewBoard(n int) *Board { return &Board{col: n, row: n} }
 
 // WithinBound returns true if the given position is within this board's bounding grid.
 func (board *Board) WithinBound(pos Position) bool {
@@ -16,12 +16,15 @@ func (board *Board) WithinBound(pos Position) bool {
 	}
 
 	col, row := pos.Split()
-	if (col < 1 || col > board.Col) || (row < 1 || row > board.Row) {
+	if (col < 1 || col > board.col) || (row < 1 || row > board.row) {
 		return false
 	}
 
 	return true
 }
+
+// Dimension return the board's dimensions represented by number of columns and rows.
+func (board *Board) Dimension() (col, row int) { return board.col, board.row }
 
 // Piece represents a single piece on the chess board.
 type Piece interface {
@@ -60,3 +63,21 @@ func (pos Position) Valid() bool {
 
 // Add adds the given delta for col and row and returns a new position
 func (pos Position) Add(dc, dr int) Position { col, row := pos.Split(); return Pos(col+dc, row+dr) }
+
+// ByPosition is sort.Interface implementation that allows sorting
+// positions by (col, row) in ascending order.
+type ByPosition []Position
+
+func (p ByPosition) Len() int      { return len(p) }
+func (p ByPosition) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
+
+func (p ByPosition) Less(i, j int) bool {
+	colA, rowA := p[i].Split()
+	colB, rowB := p[j].Split()
+
+	if colA == colB {
+		return rowA < rowB
+	} else {
+		return colA < colB
+	}
+}

@@ -1,6 +1,10 @@
 package chess
 
-import "testing"
+import (
+	"reflect"
+	"sort"
+	"testing"
+)
 
 func TestBoard_WithinBound(t *testing.T) {
 	var cases = []struct {
@@ -41,5 +45,15 @@ func TestPosition(t *testing.T) {
 		if got := c.Pos.Valid(); got != c.Expected {
 			t.Errorf("%s: got %v; want %v", c.Pos.String(), got, c.Expected)
 		}
+	}
+}
+
+func TestPosition_sort(t *testing.T) {
+	var positions = []Position{"B5", "A2", "A6", "D1"}
+	sort.Sort(ByPosition(positions))
+
+	var expected = []Position{"A2", "A6", "B5", "D1"}
+	if !reflect.DeepEqual(positions, expected) {
+		t.Errorf("got %v; want %v", positions, expected)
 	}
 }
