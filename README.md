@@ -18,3 +18,19 @@ Given the input, it generates a list of all possible cells in which the chess pi
 3. The tool does not need to implement a "chess solver" functionality
 4. The tool does not need to maintain a "current state" or "scorecard-like" functionality
 5. The input will only be the position of a single piece at a time, ie. it won't be an array of positions of multiple pieces
+
+## Running Locally
+
+Follow the [instructions here](https://go.dev/doc/install) to install the latest version of golang.
+
+To run unit tests (with coverage), execute:
+
+```shell
+> go test -cover ./...
+```
+
+To run the cli program, execute:
+
+```shell
+> go run main.go
+```
