@@ -21,12 +21,16 @@ func run(input string, out io.Writer) (err error) {
 
 	kind, pos := piece.Kind(strings.TrimSpace(parts[0])), chess.Position(strings.TrimSpace(parts[1]))
 
-	var chessPiece chess.Piece
-	if chessPiece, err = piece.New(kind, pos); err != nil {
+	// create new piece and place it on the board
+	if chessPiece, err := piece.New(kind, pos); err != nil {
 		return fmt.Errorf("failed to create piece: %s", err.Error())
+	} else {
+		if err = board.Move(chessPiece, pos); err != nil {
+			return fmt.Errorf("failed to move piece: %s", err.Error())
+		}
 	}
 
-	var positions = chessPiece.ListAll(board)
+	var positions = board.ListMoves(board.PieceAt(pos))
 
 	var sb strings.Builder
 	if len(positions) == 1 {

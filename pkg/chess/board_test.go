@@ -1,6 +1,8 @@
-package chess
+package chess_test
 
 import (
+	"github.com/riyaz-ali/chess/pkg/chess"
+	"github.com/riyaz-ali/chess/pkg/chess/piece"
 	"reflect"
 	"sort"
 	"testing"
@@ -9,7 +11,7 @@ import (
 func TestBoard_WithinBound(t *testing.T) {
 	var cases = []struct {
 		N        int
-		Pos      Position
+		Pos      chess.Position
 		Expected bool
 	}{
 		{4, "A8", false},
@@ -20,15 +22,31 @@ func TestBoard_WithinBound(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		if got := NewBoard(c.N).WithinBound(c.Pos); got != c.Expected {
+		if got := chess.NewBoard(c.N).WithinBound(c.Pos); got != c.Expected {
 			t.Errorf("Board(n=%d), %s: got %v; want %v", c.N, c.Pos.String(), got, c.Expected)
 		}
 	}
 }
 
+func TestBoard_ListMoves(t *testing.T) {
+	var board = chess.NewBoard(8)
+
+	pawn, _ := piece.New(piece.KindPawn, "E5")
+	king, _ := piece.New(piece.KindKing, "E5")
+
+	_ = board.Move(pawn, "E5")
+	if moves := board.ListMoves(king); len(moves) != 0 {
+		t.Errorf("expected no moves for %s, got %d", king, len(moves))
+	}
+
+	if moves := board.ListMoves(pawn); len(moves) != 1 {
+		t.Errorf("expected 1 moves for %s, got %d", pawn, len(moves))
+	}
+}
+
 func TestPosition(t *testing.T) {
 	var cases = []struct {
-		Pos      Position
+		Pos      chess.Position
 		Expected bool
 	}{
 		{"A8", true},
@@ -49,10 +67,10 @@ func TestPosition(t *testing.T) {
 }
 
 func TestPosition_sort(t *testing.T) {
-	var positions = []Position{"B5", "A2", "A6", "D1"}
-	sort.Sort(ByPosition(positions))
+	var positions = []chess.Position{"B5", "A2", "A6", "D1"}
+	sort.Sort(chess.ByPosition(positions))
 
-	var expected = []Position{"A2", "A6", "B5", "D1"}
+	var expected = []chess.Position{"A2", "A6", "B5", "D1"}
 	if !reflect.DeepEqual(positions, expected) {
 		t.Errorf("got %v; want %v", positions, expected)
 	}

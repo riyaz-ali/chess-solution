@@ -38,8 +38,9 @@ func New(kind Kind, pos chess.Position) (chess.Piece, error) {
 // Pawn represents a pawn chess.Piece. A pawn can move one step in vertical forward direction only.
 type Pawn struct{ pos chess.Position }
 
-func (p *Pawn) String() string      { return fmt.Sprintf("pawn(%s)", p.pos.String()) }
-func (p *Pawn) Pos() chess.Position { return p.pos }
+func (p *Pawn) String() string            { return fmt.Sprintf("pawn(%s)", p.pos.String()) }
+func (p *Pawn) Pos() chess.Position       { return p.pos }
+func (p *Pawn) SetPos(pos chess.Position) { p.pos = pos }
 
 func (p *Pawn) ListAll(board *chess.Board) []chess.Position {
 	col, row := p.pos.Split()
@@ -55,8 +56,9 @@ func (p *Pawn) ListAll(board *chess.Board) []chess.Position {
 // King represents a king chess.Piece. A king can move one step in all directions.
 type King struct{ pos chess.Position }
 
-func (k *King) String() string      { return fmt.Sprintf("king(%s)", k.pos.String()) }
-func (k *King) Pos() chess.Position { return k.pos }
+func (k *King) String() string            { return fmt.Sprintf("king(%s)", k.pos.String()) }
+func (k *King) Pos() chess.Position       { return k.pos }
+func (k *King) SetPos(pos chess.Position) { k.pos = pos }
 
 func (k *King) ListAll(board *chess.Board) []chess.Position {
 	var result = make([]chess.Position, 0, 8) // max result could be 8 for king
@@ -77,8 +79,9 @@ func (k *King) ListAll(board *chess.Board) []chess.Position {
 // Queen represents a queen chess.Piece. A queen can move multiple steps in all directions.
 type Queen struct{ pos chess.Position }
 
-func (q *Queen) String() string      { return fmt.Sprintf("queen(%s)", q.pos.String()) }
-func (q *Queen) Pos() chess.Position { return q.pos }
+func (q *Queen) String() string            { return fmt.Sprintf("queen(%s)", q.pos.String()) }
+func (q *Queen) Pos() chess.Position       { return q.pos }
+func (q *Queen) SetPos(pos chess.Position) { q.pos = pos }
 
 func (q *Queen) ListAll(board *chess.Board) []chess.Position {
 	var wg sync.WaitGroup
