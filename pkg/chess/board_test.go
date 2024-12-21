@@ -28,6 +28,47 @@ func TestBoard_WithinBound(t *testing.T) {
 	}
 }
 
+func TestBoard_Move(t *testing.T) {
+	var board = chess.NewBoard(8)
+
+	pawn, _ := piece.New(piece.KindPawn, "D2")
+
+	if err := board.Move(pawn, "D10"); err == nil {
+		t.Errorf("board.Move(%s, %s) expected error, got nil", pawn, "D10")
+	}
+
+	pos := chess.Position("D3")
+	if err := board.Move(pawn, pos); err != nil {
+		t.Errorf("board.Move(%s, %s): %v", pawn, pos, err)
+	}
+
+	if p := board.PieceAt(pos); p != pawn {
+		t.Errorf("board.PieceAt(%s): got %v; want %v", pos, p, pawn)
+	}
+
+	if pawn.Pos() != pos {
+		t.Errorf("%s position not updated", pawn)
+	}
+
+	newPosition := pos.Add(0, 1)
+	if err := board.Move(pawn, newPosition); err != nil {
+		t.Errorf("board.Move(%s, %s): %v", pawn, newPosition, err)
+	}
+
+	if p := board.PieceAt(newPosition); p != pawn {
+		t.Errorf("board.PieceAt(%s): got %v; want %v", newPosition, p, pawn)
+	}
+
+	if pawn.Pos() != newPosition {
+		t.Errorf("%s position not updated", pawn)
+	}
+
+	// previous position must be cleared
+	if board.HasPiece(pos) {
+		t.Errorf("board.HasPiece(%s): returned true, expected false", pos)
+	}
+}
+
 func TestBoard_ListMoves(t *testing.T) {
 	var board = chess.NewBoard(8)
 
@@ -62,6 +103,27 @@ func TestPosition(t *testing.T) {
 	for _, c := range cases {
 		if got := c.Pos.Valid(); got != c.Expected {
 			t.Errorf("%s: got %v; want %v", c.Pos.String(), got, c.Expected)
+		}
+	}
+}
+
+func TestPosition_Add(t *testing.T) {
+	var cases = []struct {
+		P, Exp   chess.Position
+		Col, Row int
+	}{
+		{"A1", "A2", 0, 1},
+		{"A1", "B1", 1, 0},
+		{"A1", "B2", 1, 1},
+
+		{"D4", "D3", 0, -1},
+		{"D4", "C4", -1, 0},
+		{"D4", "C3", -1, -1},
+	}
+
+	for _, c := range cases {
+		if got := c.P.Add(c.Col, c.Row); got != c.Exp {
+			t.Errorf("%q.Add(%d, %d): got %v; want %v", c.P.String(), c.Col, c.Row, got, c.Exp)
 		}
 	}
 }

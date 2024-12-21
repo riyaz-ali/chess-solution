@@ -31,19 +31,9 @@ func run(input string, out io.Writer) (err error) {
 	}
 
 	var positions = board.ListMoves(board.PieceAt(pos))
+	var result = Join(positions, ", ")
 
-	var sb strings.Builder
-	if len(positions) == 1 {
-		sb.WriteString(positions[0].String())
-	} else if len(positions) > 1 {
-		sb.WriteString(positions[0].String())
-		for _, p := range positions[1:] {
-			sb.WriteString(", ")
-			sb.WriteString(p.String())
-		}
-	}
-
-	_, _ = fmt.Fprint(out, sb.String()) // write to output stream
+	_, _ = fmt.Fprint(out, result) // write to output stream
 	return nil
 }
 
