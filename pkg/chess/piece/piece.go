@@ -42,7 +42,7 @@ func (p *Pawn) String() string            { return fmt.Sprintf("pawn(%s)", p.pos
 func (p *Pawn) Pos() chess.Position       { return p.pos }
 func (p *Pawn) SetPos(pos chess.Position) { p.pos = pos }
 
-func (p *Pawn) ListAll(board *chess.Board) []chess.Position {
+func (p *Pawn) ListMoves(board *chess.Board) []chess.Position {
 	col, row := p.pos.Split()
 
 	next := chess.Pos(col, row+1) // move to next vertical block
@@ -60,7 +60,7 @@ func (k *King) String() string            { return fmt.Sprintf("king(%s)", k.pos
 func (k *King) Pos() chess.Position       { return k.pos }
 func (k *King) SetPos(pos chess.Position) { k.pos = pos }
 
-func (k *King) ListAll(board *chess.Board) []chess.Position {
+func (k *King) ListMoves(board *chess.Board) []chess.Position {
 	var result = make([]chess.Position, 0, 8) // max result could be 8 for king
 
 	col, row := k.pos.Split()
@@ -83,7 +83,7 @@ func (q *Queen) String() string            { return fmt.Sprintf("queen(%s)", q.p
 func (q *Queen) Pos() chess.Position       { return q.pos }
 func (q *Queen) SetPos(pos chess.Position) { q.pos = pos }
 
-func (q *Queen) ListAll(board *chess.Board) []chess.Position {
+func (q *Queen) ListMoves(board *chess.Board) []chess.Position {
 	var wg sync.WaitGroup
 	var ch = make(chan chess.Position)
 

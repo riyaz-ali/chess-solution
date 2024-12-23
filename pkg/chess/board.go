@@ -72,7 +72,7 @@ func (board *Board) ListMoves(piece Piece) []Position {
 		return nil // given piece and piece on board at the location are not the same!
 	}
 
-	return piece.ListAll(board)
+	return piece.ListMoves(board)
 }
 
 // Reset resets the state of the board
@@ -88,7 +88,7 @@ type Piece interface {
 	// SetPos update the piece's current position
 	SetPos(Position)
 
-	// ListAll returns a list of all possible position that this
+	// ListMoves returns a list of all possible position that this
 	// piece can move to on the given board
-	ListAll(board *Board) []Position
+	ListMoves(board *Board) []Position
 }
